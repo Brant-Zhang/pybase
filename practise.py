@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/local/bin/python3
 #coding=utf-8
 __version__ = "0.1"
 __author__ = "brant"
@@ -16,6 +16,7 @@ I do, you know I really really do
 '''
 
 fruits = ['apple','balala','orange','mango']
+nums = [89,33,17,8]
 
 ## strings
 def pystr():
@@ -51,8 +52,13 @@ def pymap():
     data['status']=m2
     print(data['nanjing'],data.get('usa'),data.pop("hello"))
 
+def package():
+    import foo
+    print(foo.sum(nums))
+
 if __name__ == '__main__':
     #pystr()
     #pylist()
     #pytuple()
-    pymap()
+    #pymap()
+    package()
