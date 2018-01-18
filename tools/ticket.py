@@ -75,7 +75,7 @@ class huoche(object):
 					self.driver.find_by_text(u"查询").click()
 					count += 1
 					print u"循环点击查询... 第 %s 次" % count
-					sleep(0.2)
+					sleep(0.5)
 					try:
 						self.driver.find_by_text(u"预订")[self.order - 1].click()
 					except Exception as e:

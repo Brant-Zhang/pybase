@@ -1,1 +1,0 @@
-{"hangzhou":65,"beijing":70}
