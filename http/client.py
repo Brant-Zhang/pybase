@@ -3,6 +3,7 @@
 import http.client
 import json
 import time
+import os
 
 defaultval="{\"code\":1,\"msg\":\"no record right now!\"}"
 
@@ -46,6 +47,23 @@ def post():
         conn.close()
         time.sleep(30)
 
+class youpai:
+    def __init__(self,host,url,source):
+        self.url=url
+        self.host=host
+        self.source=source
+    def upload(self):
+        for root,dirs,files in os.walk(self.source):
+            for filename in files:
+                print(filename)
+                conn=http.client.HTTPConnection(self.host,80,timeout=300)
+                tf=time.strftime("%a, %d %b %Y %I:%M:%S %p %Z", time.gmtime())
+                hds={'Authorization':'UPYUN admin mRJzUuWH0R6ZAB675gUVfeziXdkzZtZ1','Date':tf,'Content-MD5':''}
+                conn.request('PUT',self.url,open(self.source+'/'+filename,'rb'),hds)
+                r1 = conn.getresponse()
+                print(r1.status,r1.reason)
+                conn.close()
+                time.sleep(30)
 def start():
     cubes = []
     host='192.168.30.89'
@@ -64,5 +82,7 @@ def start():
     print(cubes)
 
 if __name__ == "__main__":
-    post()
+    u=youpai('http://v0.api.upyun.com','/image-qiongshi/image','/Users/brant/go/src/github.com/branthz/resource/pic')
+    u.upload()
+    #post()
     #show()
