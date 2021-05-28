@@ -5,18 +5,37 @@ import os
 
 dirname = "./files"
 
-def allwork():
-    oot=disk()
+def getFilelist():
+    flist = []
     for root, _, filenames in os.walk(dirname):
         for filename in filenames:
             if filename.startswith('.'):
                 continue
             else:
                 realname=os.path.join(root, filename)
-                ex=excel(realname)
-                ex.prepare()
-                ex.cal()
-                oot.saveResult(filename,ex.output)
+                flist.append(realname)
+    return flist
+
+#合并文件夹下多个同类型文件
+def mergeExcel(files):
+    dname="./files/all.xlsx"
+    sky = pd.DataFrame([])
+    for fname in files:
+        data = pd.read_excel(fname,sheet_name= 0,index_col=0,header=0)
+        print(data)
+        sky=sky.append(data,ignore_index=True)
+        print(sky)
+    with pd.ExcelWriter(dname) as writer:
+        sky.to_excel(writer,sheet_name='Sheet1',index=False)
+
+def allwork():
+    oot=disk()
+    ls=getFilelist()
+    for fname in ls:
+        ex=excel(fname)
+        ex.prepare()
+        ex.cal()
+        oot.saveResult(filename,ex.output)
     oot.writeDisk()
 
 class disk:
@@ -31,7 +50,7 @@ class disk:
         #添加新列，标记来自哪个文件
         xv['from']=fname
         self.buffer=self.buffer.append(xv,ignore_index=True)
-        print(self.buffer)
+        #print(self.buffer)
 
     def writeDisk(self):
         with pd.ExcelWriter(self.dstname) as writer:
@@ -65,7 +84,9 @@ class excel:
             self.output.append([item,result])
 
 def main():
-    allwork()
+    #allwork()
+    ls=getFilelist()
+    mergeExcel(ls)
 
 if __name__ == '__main__':
     main()
